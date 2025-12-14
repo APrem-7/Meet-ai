@@ -35,6 +35,7 @@ const formSchema = z.object({
 
 export const SignInView = () => {
   const router = useRouter();
+  const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,6 +48,7 @@ export const SignInView = () => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setError(null);
+    setPending(true);
 
     await authClient.signIn.email(
       {
@@ -55,6 +57,7 @@ export const SignInView = () => {
       },
       {
         onSuccess: () => {
+          setPending(false);
           router.push("/");
         },
         onError: (error) => {
@@ -122,7 +125,7 @@ export const SignInView = () => {
                     <AlertTitle>{error}r</AlertTitle>
                   </Alert>
                 )}
-                <Button type="submit" className="w-full">
+                <Button disabled={pending} type="submit" className="w-full">
                   Sign In
                 </Button>
                 <div
