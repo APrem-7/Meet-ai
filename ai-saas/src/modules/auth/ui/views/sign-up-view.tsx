@@ -1,0 +1,4 @@
+import { Card } from "@/components/ui/card";
+export const SignUpView = () => {
+  return <Card>Sign Up Page</Card>;
+};
