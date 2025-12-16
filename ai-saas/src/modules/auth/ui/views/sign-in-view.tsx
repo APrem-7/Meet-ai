@@ -26,6 +26,7 @@ import {
   FormMessage,
   FormField,
 } from "@/components/ui/form";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 
 //z is similar to dataclass/pydantic but for TypeScript
 const formSchema = z.object({
@@ -66,6 +67,17 @@ export const SignInView = () => {
       }
     );
   };
+
+  const onSocial = (provider: "google" | "github") => {
+    setError(null);
+    setPending(true);
+
+    authClient.signIn.social({
+      provider: provider,
+      callbackURL: "/",
+    });
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
@@ -122,7 +134,7 @@ export const SignInView = () => {
                 {!!error && (
                   <Alert className="bg-destructive/10 border-none">
                     <OctagonAlertIcon className="h-4 w-4 !text-destructive " />
-                    <AlertTitle>{error}r</AlertTitle>
+                    <AlertTitle>{error}</AlertTitle>
                   </Alert>
                 )}
                 <Button disabled={pending} type="submit" className="w-full">
@@ -143,12 +155,10 @@ export const SignInView = () => {
                     type="button"
                     className="w-full"
                     onClick={() => {
-                      authClient.signIn.social({
-                        provider: "google",
-                      });
+                      onSocial("google");
                     }}
                   >
-                    Google
+                    <FaGoogle />
                   </Button>
                   <Button
                     disabled={pending}
@@ -156,12 +166,10 @@ export const SignInView = () => {
                     type="button"
                     className="w-full"
                     onClick={() => {
-                      authClient.signIn.social({
-                        provider: "github",
-                      });
+                      onSocial("github");
                     }}
                   >
-                    Github
+                    <FaGithub />
                   </Button>
                 </div>
                 <div className="text-center text-sm">
