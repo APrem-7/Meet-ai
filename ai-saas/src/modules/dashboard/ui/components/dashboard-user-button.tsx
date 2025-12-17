@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { GeneratedAvatar } from "@/components/generated-avatar";
 
 export const DashboardUserButton = () => {
@@ -21,6 +21,9 @@ export const DashboardUserButton = () => {
         {data.user.image ? (
           <Avatar>
             <AvatarImage src={data.user.image} />
+            <AvatarFallback>
+              {data.user.name?.charAt(0).toUpperCase() || "U"}
+            </AvatarFallback>
           </Avatar>
         ) : (
           <GeneratedAvatar
