@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { GeneratedAvatar } from "@/components/generated-avatar";
-import { ChevronDownIcon } from "lucide-react";
+import { ChevronDownIcon, CreditCardIcon, LogOutIcon } from "lucide-react";
 
 export const DashboardUserButton = () => {
   const { data, isPending } = authClient.useSession();
@@ -35,7 +35,7 @@ export const DashboardUserButton = () => {
           <p className="text-sm truncate w-full">{data.user.name}</p>
           <p className="text-xs truncate w-full">{data.user.email}</p>
         </div>
-        <ChevronDownIcon />
+        <ChevronDownIcon className="size-4 shrink-0" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" side="right" className="w-72">
         <DropdownMenuLabel>
@@ -44,6 +44,15 @@ export const DashboardUserButton = () => {
             <span className="text-xs truncate w-full">{data.user.email}</span>
           </div>
         </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="cursor-pointer flex items-center justify-between">
+          Billing
+          <CreditCardIcon className="size-4" />
+        </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer flex items-center justify-between">
+          Logout
+          <LogOutIcon className="size-4" />
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
