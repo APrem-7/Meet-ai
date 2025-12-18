@@ -2,6 +2,7 @@ import { authClient } from "@/lib/auth-client";
 
 import {
   DropdownMenu,
+  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -9,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { GeneratedAvatar } from "@/components/generated-avatar";
+import { ChevronDownIcon } from "lucide-react";
 
 export const DashboardUserButton = () => {
   const { data, isPending } = authClient.useSession();
@@ -29,7 +31,20 @@ export const DashboardUserButton = () => {
             className="size-9 mr-3"
           />
         )}
+        <div className="flex flex-col gap-0.5 text-left overflow-hodden flex-1 min-w-0 ">
+          <p className="text-sm truncate w-full">{data.user.name}</p>
+          <p className="text-xs truncate w-full">{data.user.email}</p>
+        </div>
+        <ChevronDownIcon />
       </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" side="right" className="w-72">
+        <DropdownMenuLabel>
+          <div className="flex flex-col gap-1">
+            <span className="text-sm truncate w-full">{data.user.name}</span>
+            <span className="text-xs truncate w-full">{data.user.email}</span>
+          </div>
+        </DropdownMenuLabel>
+      </DropdownMenuContent>
     </DropdownMenu>
   );
 };
