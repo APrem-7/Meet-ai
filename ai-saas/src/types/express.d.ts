@@ -8,5 +8,6 @@ type Session = Awaited<
 declare module "express-serve-static-core" {
   interface Request {
     auth?: Session;
+    user?: Session["user"];
   }
 }
