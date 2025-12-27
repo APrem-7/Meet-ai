@@ -1,32 +1,35 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { fetchAgents } from "@/app/api/agents/agents";
-import { LoadingState } from "@/components/loading-state";
+
+interface Agent {
+  id: string;
+  name: string;
+  description: string;
+  model: string;
+  temperature: number;
+  top_p: number;
+  presence_penalty: number;
+  frequency_penalty: number;
+}
 
 export const AgentView = () => {
-  const { data: agents, isLoading } = useQuery({
+  const { data: agents } = useSuspenseQuery({
     queryKey: ["agents"],
-    throwOnError: true,
     queryFn: async () => {
-      console.log("Client fetching agents");
+      console.log("🌐 CLIENT fetching agents in useSuspenseQuery");
       return await fetchAgents();
     },
+    staleTime: 30_000,
   });
 
-  if (isLoading) {
-    return (
-      <LoadingState
-        title="Loading agents"
-        description="Please wait while we fetch the agents"
-      />
-    );
-  }
+  console.log("🔍 AgentView render - agents data:", agents ? "received" : "none");
 
   return (
     <div>
       <pre>
         {JSON.stringify(
-          agents?.map((agent) => agent.name),
+          agents?.map((agent: Agent) => agent.name),  
           null,
           2
         )}
