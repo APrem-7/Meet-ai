@@ -14,26 +14,25 @@ interface Agent {
 }
 
 export const AgentView = () => {
-  const { data: agents } = useSuspenseQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ["agents"],
     queryFn: async () => {
       console.log("🌐 CLIENT fetching agents in useSuspenseQuery");
-      return await fetchAgents();
+      return fetchAgents();
     },
+    useErrorBoundary: true,
     staleTime: 30_000,
   });
 
-  console.log("🔍 AgentView render - agents data:", agents ? "received" : "none");
+  console.log("🔍 AgentView render - agents data: received");
 
   return (
-    <div>
-      <pre>
-        {JSON.stringify(
-          agents?.map((agent: Agent) => agent.name),  
-          null,
-          2
-        )}
-      </pre>
-    </div>
+    <pre>
+      {JSON.stringify(
+        data.map((agent: Agent) => agent.name),
+        null,
+        2
+      )}
+    </pre>
   );
 };
