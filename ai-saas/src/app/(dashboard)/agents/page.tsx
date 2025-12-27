@@ -1,17 +1,14 @@
 import { AgentView } from "@/modules/agents/ui/views/agent-view";
 import { fetchAgents } from "@/app/api/agents/agents";
 import { getQueryClient } from "@/utils/query-client";
-//import { ErrorState } from "@/components/error-state";
-
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-
 import { LoadingState } from "@/components/loading-state";
-
 import { Suspense } from "react";
+
 const Page = async () => {
   const queryClient = getQueryClient();
 
-  // Prefetch without awaiting - non-blocking
+  // Prefetch the data
   await queryClient.prefetchQuery({
     queryKey: ["agents"],
     queryFn: async () => {

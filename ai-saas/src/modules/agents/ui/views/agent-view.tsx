@@ -16,15 +16,20 @@ interface Agent {
 export const AgentView = () => {
   const { data: agents } = useSuspenseQuery({
     queryKey: ["agents"],
-    queryFn: fetchAgents,
+    queryFn: async () => {
+      console.log("🌐 CLIENT fetching agents in useSuspenseQuery");
+      return await fetchAgents();
+    },
     staleTime: 30_000,
   });
+
+  console.log("🔍 AgentView render - agents data:", agents ? "received" : "none");
 
   return (
     <div>
       <pre>
         {JSON.stringify(
-          agents?.map((agent) => agent.name),
+          agents?.map((agent: Agent) => agent.name),  
           null,
           2
         )}
