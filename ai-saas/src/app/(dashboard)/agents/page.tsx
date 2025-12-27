@@ -6,6 +6,7 @@ import { LoadingState } from "@/components/loading-state";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorState } from "@/components/error-state";
+import { ListHeader } from "@/modules/agents/components/list-header";
 
 const Page = async () => {
   const queryClient = getQueryClient();
@@ -20,6 +21,8 @@ const Page = async () => {
   });
 
   return (
+    <>
+    <ListHeader />
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Suspense
         fallback={
@@ -36,6 +39,7 @@ const Page = async () => {
         </ErrorBoundary>
       </Suspense>
     </HydrationBoundary>
+    </>
   );
 };
 
