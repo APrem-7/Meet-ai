@@ -16,11 +16,11 @@ export const requireAuth = async (
   try {
     const session = await auth.api.getSession({ headers });
 
-    if (!session) {
+    if (!session || !session.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    req.auth = session;
+    req.user = session.user;
     next();
   } catch (err) {
     next(err);
