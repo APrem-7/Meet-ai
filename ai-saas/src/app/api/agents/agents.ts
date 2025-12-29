@@ -1,3 +1,5 @@
+import { agentInsertSchema } from "@/modules/agents/schema";
+
 export async function fetchAgents() {
   const res = await fetch("http://localhost:8000/agents");
 
@@ -8,14 +10,15 @@ export async function fetchAgents() {
   return res.json();
 }
 
-async function createAgent(data: { name: string; description: string }) {
+export const createAgent = async (input: { name: string; description: string }) => {
+  const input_data = agentInsertSchema.parse(input); // 👈 REAL SECURITY
   const res = await fetch("http://localhost:8000/agents", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include", // IMPORTANT for cookies/session
-    body: JSON.stringify(data),
+    body: JSON.stringify(input_data),
   });
 
   if (!res.ok) {
