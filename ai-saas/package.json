@@ -7,6 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "server": "tsx watch src/server/index.ts",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio"

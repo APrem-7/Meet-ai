@@ -1,4 +1,4 @@
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from '@/hooks/use-mobile';
 
 import {
   Dialog,
@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
 import {
   Drawer,
@@ -14,7 +14,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerDescription,
-} from "@/components/ui/drawer";
+} from '@/components/ui/drawer';
 interface ResponsiveDialogProps {
   title: string;
   description: string;

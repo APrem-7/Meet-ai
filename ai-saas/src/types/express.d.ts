@@ -1,13 +1,11 @@
-import "express-serve-static-core";
-import { auth } from "@/lib/auth";
+import 'express-serve-static-core';
+import { auth } from '@/lib/auth';
 
-type Session = Awaited<
-  ReturnType<typeof auth.api.getSession>
->;
+type Session = Awaited<ReturnType<typeof auth.api.getSession>>;
 
-declare module "express-serve-static-core" {
+declare module 'express-serve-static-core' {
   interface Request {
     auth?: Session;
-    user?: Session["user"];
+    user?: Session['user'];
   }
 }

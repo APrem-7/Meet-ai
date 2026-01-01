@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 
-import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import { AgentView } from "@/modules/agents/ui/views/agent-view";
-import { LoadingState } from "@/components/loading-state";
+import { authClient } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
+import { AgentView } from '@/modules/agents/ui/views/agent-view';
+import { LoadingState } from '@/components/loading-state';
 
 export const HomeView = () => {
   const router = useRouter();

@@ -1,4 +1,4 @@
-import { authClient } from "@/lib/auth-client";
+import { authClient } from '@/lib/auth-client';
 
 import {
   DropdownMenu,
@@ -7,7 +7,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
   Drawer,
   DrawerContent,
@@ -16,14 +16,14 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import { useIsMobile } from "@/hooks/use-mobile";
+} from '@/components/ui/drawer';
+import { useIsMobile } from '@/hooks/use-mobile';
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { GeneratedAvatar } from "@/components/generated-avatar";
-import { ChevronDownIcon, CreditCardIcon, LogOutIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { GeneratedAvatar } from '@/components/generated-avatar';
+import { ChevronDownIcon, CreditCardIcon, LogOutIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
 export const DashboardUserButton = () => {
   const router = useRouter();
@@ -32,7 +32,7 @@ export const DashboardUserButton = () => {
     authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/sign-in"); // redirect to login page
+          router.push('/sign-in'); // redirect to login page
         },
       },
     });

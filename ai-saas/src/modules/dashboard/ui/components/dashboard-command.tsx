@@ -3,8 +3,8 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import { Dispatch, SetStateAction } from "react";
+} from '@/components/ui/command';
+import { Dispatch, SetStateAction } from 'react';
 
 interface Props {
   open: boolean;

@@ -1,15 +1,15 @@
-import { createAvatar } from "@dicebear/core";
-import { adventurer, initials } from "@dicebear/collection";
+import { createAvatar } from '@dicebear/core';
+import { adventurer, initials } from '@dicebear/collection';
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 
-import { cn } from "@/lib/utils";
-import { AvatarFallback } from "@radix-ui/react-avatar";
+import { cn } from '@/lib/utils';
+import { AvatarFallback } from '@radix-ui/react-avatar';
 
 interface GeneratedAvatarProps {
   seed: string;
   className?: string;
-  variant: "adventurer" | "initials";
+  variant: 'adventurer' | 'initials';
 }
 
 export const GeneratedAvatar = ({
@@ -19,7 +19,7 @@ export const GeneratedAvatar = ({
 }: GeneratedAvatarProps) => {
   let avatar;
 
-  if (variant === "adventurer") {
+  if (variant === 'adventurer') {
     avatar = createAvatar(adventurer, {
       seed,
     });

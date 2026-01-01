@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-import { FaGithub, FaGoogle } from "react-icons/fa";
+import { FaGithub, FaGoogle } from 'react-icons/fa';
 
-import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
-import { z } from "zod";
-import { OctagonAlertIcon } from "lucide-react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from 'zod';
+import { OctagonAlertIcon } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Alert, AlertTitle } from "@/components/ui/alert";
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Alert, AlertTitle } from '@/components/ui/alert';
 
-import { authClient } from "@/lib/auth-client";
+import { authClient } from '@/lib/auth-client';
 import {
   //useFormField,
   Form,
@@ -27,19 +27,19 @@ import {
   //FormDescription,
   FormMessage,
   FormField,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 
 //z is similar to dataclass/pydantic but for TypeScript
 const formSchema = z
   .object({
-    name: z.string().min(1, { message: "Name is required" }),
+    name: z.string().min(1, { message: 'Name is required' }),
     email: z.string().email(),
-    password: z.string().min(1, { message: "Password is required" }),
-    confirmPassword: z.string().min(1, { message: "Password is required" }),
+    password: z.string().min(1, { message: 'Password is required' }),
+    confirmPassword: z.string().min(1, { message: 'Password is required' }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ["confirmPassword"],
+    path: ['confirmPassword'],
   });
 
 export const SignUpView = () => {
@@ -50,10 +50,10 @@ export const SignUpView = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
@@ -70,7 +70,7 @@ export const SignUpView = () => {
       {
         onSuccess: () => {
           setPending(false);
-          router.push("/");
+          router.push('/');
         },
         onError: (error) => {
           setError(error?.error?.message);
@@ -80,13 +80,13 @@ export const SignUpView = () => {
     );
   };
 
-  const onSocial = (provider: "google" | "github") => {
+  const onSocial = (provider: 'google' | 'github') => {
     setError(null);
     setPending(true);
 
     authClient.signIn.social({
       provider: provider,
-      callbackURL: "/",
+      callbackURL: '/',
     });
   };
 
@@ -99,7 +99,7 @@ export const SignUpView = () => {
               <div className="flex flex-col gap-6 ">
                 <div className="flex flex-col items-center  text-center">
                   <h1 className="text-2xl font-bold">
-                    Let&apos;s get started!{" "}
+                    Let&apos;s get started!{' '}
                   </h1>
                   <p className="text-muted-foreground text-balance">
                     Create your account
@@ -207,7 +207,7 @@ export const SignUpView = () => {
                     type="submit"
                     className="w-full"
                     onClick={() => {
-                      onSocial("google");
+                      onSocial('google');
                     }}
                   >
                     <FaGoogle />
@@ -218,14 +218,14 @@ export const SignUpView = () => {
                     type="submit"
                     className="w-full"
                     onClick={() => {
-                      onSocial("github");
+                      onSocial('github');
                     }}
                   >
                     <FaGithub />
                   </Button>
                 </div>
                 <div className="text-center text-sm">
-                  Aldready have an account?{" "}
+                  Aldready have an account?{' '}
                   <Link
                     href="/sign-in"
                     className="underline underline-offset-4"
@@ -244,7 +244,7 @@ export const SignUpView = () => {
         </CardContent>
       </Card>
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance  *:[a]:underline  *:[a]:underline-offset-4 ">
-        By Clicking continue, you agree to our <a href="#">Terms Of Service</a>{" "}
+        By Clicking continue, you agree to our <a href="#">Terms Of Service</a>{' '}
         and <a href="#">Privacy Policy</a>
       </div>
     </div>

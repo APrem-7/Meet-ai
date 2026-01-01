@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { auth } from "@/lib/auth";
+import { Request, Response, NextFunction } from 'express';
+import { auth } from '@/lib/auth';
 
 export const requireAuth = async (
   req: Request,
@@ -10,14 +10,14 @@ export const requireAuth = async (
 
   for (const [key, value] of Object.entries(req.headers)) {
     if (value === undefined) continue;
-    headers.set(key, Array.isArray(value) ? value.join(",") : value);
+    headers.set(key, Array.isArray(value) ? value.join(',') : value);
   }
 
   try {
     const session = await auth.api.getSession({ headers });
 
     if (!session) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ message: 'Unauthorized' });
     }
 
     req.auth = session;

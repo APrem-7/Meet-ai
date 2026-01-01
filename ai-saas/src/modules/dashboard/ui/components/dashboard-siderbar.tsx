@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { BotIcon, StarIcon, VideoIcon } from "lucide-react";
+import { BotIcon, StarIcon, VideoIcon } from 'lucide-react';
 
-import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
+import { cn } from '@/lib/utils';
+import { Separator } from '@/components/ui/separator';
 
 import {
   Sidebar,
@@ -17,31 +17,31 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar';
 
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { DashboardUserButton } from "./dashboard-user-button";
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { DashboardUserButton } from './dashboard-user-button';
 
 const firstSection = [
   {
     icon: VideoIcon,
-    label: "Meetings",
-    href: "/meetings",
+    label: 'Meetings',
+    href: '/meetings',
   },
   {
     icon: BotIcon,
-    label: "Agents",
-    href: "/agents",
+    label: 'Agents',
+    href: '/agents',
   },
 ];
 
 const secondSection = [
   {
     icon: StarIcon,
-    label: "Upgrade",
-    href: "/upgrade",
+    label: 'Upgrade',
+    href: '/upgrade',
   },
 ];
 
@@ -68,9 +68,9 @@ export const DashboardSidebar = () => {
                   <SidebarMenuButton
                     asChild
                     className={cn(
-                      "h-10 hover:bg-linear-to-r/oklch border border-transparent hover:border-[#5D6B68]/10 from-sidebar-accent from-5% via-30% via-sidebar/50 to-sidebar/50",
+                      'h-10 hover:bg-linear-to-r/oklch border border-transparent hover:border-[#5D6B68]/10 from-sidebar-accent from-5% via-30% via-sidebar/50 to-sidebar/50',
                       pathname === item.href &&
-                        "bg-linear-to-r/oklch border-[#5D6B68]/10"
+                        'bg-linear-to-r/oklch border-[#5D6B68]/10'
                     )}
                     isActive={pathname === item.href}
                   >
@@ -99,9 +99,9 @@ export const DashboardSidebar = () => {
                   <SidebarMenuButton
                     asChild
                     className={cn(
-                      "h-10 hover:bg-linear-to-r/oklch border border-transparent hover:border-[#5D6B68]/10 from-sidebar-accent from-5% via-30% via-sidebar/50 to-sidebar/50",
+                      'h-10 hover:bg-linear-to-r/oklch border border-transparent hover:border-[#5D6B68]/10 from-sidebar-accent from-5% via-30% via-sidebar/50 to-sidebar/50',
                       pathname === item.href &&
-                        "bg-linear-to-r/oklch border-[#5D6B68]/10"
+                        'bg-linear-to-r/oklch border-[#5D6B68]/10'
                     )}
                     isActive={pathname === item.href}
                   >

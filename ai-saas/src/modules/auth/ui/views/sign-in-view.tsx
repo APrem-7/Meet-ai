@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
-import { z } from "zod";
-import { OctagonAlertIcon } from "lucide-react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from 'zod';
+import { OctagonAlertIcon } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Alert, AlertTitle } from "@/components/ui/alert";
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Alert, AlertTitle } from '@/components/ui/alert';
 
-import { authClient } from "@/lib/auth-client";
+import { authClient } from '@/lib/auth-client';
 import {
- // useFormField,
+  // useFormField,
   Form,
   FormItem,
   FormLabel,
@@ -25,13 +25,13 @@ import {
   //FormDescription,
   FormMessage,
   FormField,
-} from "@/components/ui/form";
-import { FaGithub, FaGoogle } from "react-icons/fa";
+} from '@/components/ui/form';
+import { FaGithub, FaGoogle } from 'react-icons/fa';
 
 //z is similar to dataclass/pydantic but for TypeScript
 const formSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(1, { message: "Password is required" }),
+  password: z.string().min(1, { message: 'Password is required' }),
 });
 
 export const SignInView = () => {
@@ -42,8 +42,8 @@ export const SignInView = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
@@ -59,7 +59,7 @@ export const SignInView = () => {
       {
         onSuccess: () => {
           setPending(false);
-          router.push("/");
+          router.push('/');
         },
         onError: (error) => {
           setError(error?.error?.message);
@@ -68,13 +68,13 @@ export const SignInView = () => {
     );
   };
 
-  const onSocial = (provider: "google" | "github") => {
+  const onSocial = (provider: 'google' | 'github') => {
     setError(null);
     setPending(true);
 
     authClient.signIn.social({
       provider: provider,
-      callbackURL: "/",
+      callbackURL: '/',
     });
   };
 
@@ -155,7 +155,7 @@ export const SignInView = () => {
                     type="button"
                     className="w-full"
                     onClick={() => {
-                      onSocial("google");
+                      onSocial('google');
                     }}
                   >
                     <FaGoogle />
@@ -166,14 +166,14 @@ export const SignInView = () => {
                     type="button"
                     className="w-full"
                     onClick={() => {
-                      onSocial("github");
+                      onSocial('github');
                     }}
                   >
                     <FaGithub />
                   </Button>
                 </div>
                 <div className="text-center text-sm">
-                  Don&apos;t have an account?{" "}
+                  Don&apos;t have an account?{' '}
                   <Link
                     href="/sign-up"
                     className="underline underline-offset-4"
@@ -192,7 +192,7 @@ export const SignInView = () => {
         </CardContent>
       </Card>
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance  *:[a]:underline  *:[a]:underline-offset-4 ">
-        By Clicking continue, you agree to our <a href="#">Terms Of Service</a>{" "}
+        By Clicking continue, you agree to our <a href="#">Terms Of Service</a>{' '}
         and <a href="#">Privacy Policy</a>
       </div>
     </div>
