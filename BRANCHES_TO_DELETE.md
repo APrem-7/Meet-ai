@@ -8,6 +8,8 @@ This document lists all branches that have been fully merged into the `main` bra
 **Generated:** 2026-01-01  
 **Based on:** Pull Request merge history
 
+**Note:** Some branches appear in multiple PRs but only need to be deleted once.
+
 ---
 
 ## Merged Branches (Safe to Delete)
@@ -36,11 +38,12 @@ This document lists all branches that have been fully merged into the `main` bra
 - **Merge Commit:** 0d9e982
 - **Description:** Integrated social login options (Google, GitHub)
 
-### 5. AuthUI-Socials-Callbacks (duplicate)
-- **PR:** #5
+### 5. AuthUI-Socials-Callbacks (also in PR #5)
+- **PR:** #5 (same branch as #3, merged via different PR path)
 - **Merged:** 2025-12-16
 - **Merge Commit:** 0b34d7a
 - **Description:** User authentication system with social login
+- **Note:** This is the same branch as entry #3, merged via PR #5
 
 ### 6. AuthUI
 - **PR:** #6
