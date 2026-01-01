@@ -1,11 +1,14 @@
-import { AgentView } from "@/modules/agents/ui/views/agent-view";
-import { AgentsListHeader } from "@/modules/agents/components/agent-list-header";
+import { AgentView } from '@/modules/agents/ui/views/agent-view';
+import { AgentsListHeader } from '@/modules/agents/components/agent-list-header';
 
 const Page = async () => {
   return (
-    <div className="p-4 flex flex-col gap-y-4">
-      <AgentView />
-    </div>
+    <>
+      <AgentsListHeader />
+      <div className="p-4 flex flex-col gap-y-4">
+        <AgentView />
+      </div>
+    </>
   );
 };
 

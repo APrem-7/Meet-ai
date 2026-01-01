@@ -13,14 +13,12 @@ interface Agent {
 export const AgentView = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['agents'],
-    queryFn: async () => {
-      console.log('🌐 CLIENT fetching agents in useSuspenseQuery');
+    queryFn: () => {
+      console.log('🌐 CLIENT fetching agents in useQuery');
       return fetchAgents();
     },
     staleTime: 30_000,
   });
-
-  console.log('🔍 AgentView render - agents data: received');
 
   if (isLoading) {
     return (
