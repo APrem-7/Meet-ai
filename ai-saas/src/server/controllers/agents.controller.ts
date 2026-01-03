@@ -23,7 +23,7 @@ export const getAgents = async (req: Request, res: Response) => {
 export const createAgents = async (req: Request, res: Response) => {
     try {
         const input = agentInsertSchema.parse(req.body); // 🔥 REAL SECURITY
-        const data = await db.insert(agents).values({
+        const [data] = await db.insert(agents).values({
             name: input.name,
             instructions: input.instruction,
             userId: req.user.id,
