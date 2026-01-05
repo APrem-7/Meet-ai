@@ -1,4 +1,5 @@
 import { agentInsertSchema } from '@/modules/agents/schema';
+import z from 'zod';
 
 export const fetchAgents = async () => {
   const res = await fetch('http://localhost:8000/agents', {
@@ -15,10 +16,7 @@ export const fetchAgents = async () => {
   return res.json();
 };
 
-export const createAgent = async (input: {
-  name: string;
-  description: string;
-}) => {
+export const createAgent = async (input: z.infer<typeof agentInsertSchema>) => {
   const input_data = agentInsertSchema.parse(input); // 👈 REAL SECURITY
   const res = await fetch('http://localhost:8000/agents', {
     method: 'POST',
@@ -35,3 +33,5 @@ export const createAgent = async (input: {
 
   return res.json();
 };
+
+
