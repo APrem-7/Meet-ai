@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { PlusIcon } from "lucide-react";
+import { PlusIcon } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { NewAgentDialog } from "./new-agent-dialog";
-import { useState } from "react";
+import { Button } from '@/components/ui/button';
+import { NewAgentDialog } from './new-agent-dialog';
+import { useState } from 'react';
 
 export const AgentsListHeader = () => {
   const [open, setOpen] = useState(false);
