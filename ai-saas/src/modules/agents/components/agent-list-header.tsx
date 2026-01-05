@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { PlusIcon } from "lucide-react";
+import { PlusIcon } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { NewAgentDialog } from "./new-agent-dialog";
-import { useState } from "react";
+import { Button } from '@/components/ui/button';
+import { NewAgentDialog } from './new-agent-dialog';
+import { useState } from 'react';
 
 export const AgentsListHeader = () => {
   const [open, setOpen] = useState(false);
@@ -15,10 +15,8 @@ export const AgentsListHeader = () => {
         <div className="flex items-center justify-between">
           <h5 className="font-medium text-xl">My Agents</h5>
           <Button onClick={() => setOpen(true)}>
-            {/* TODO: implement agent creation flow*/}
             <PlusIcon />
             New Agent
-            {/* new agent form goes here*/}
           </Button>
         </div>
       </div>
