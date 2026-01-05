@@ -56,7 +56,7 @@ export const AgentForm = ({
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} placeholder="Enter agent name" />
               </FormControl>
             </FormItem>
           )}
@@ -68,7 +68,7 @@ export const AgentForm = ({
             <FormItem>
               <FormLabel>Instruction</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} placeholder="Enter agent instruction" />
               </FormControl>
             </FormItem>
           )}

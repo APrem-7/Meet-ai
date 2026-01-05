@@ -1,4 +1,5 @@
-import { ResponsiveDialog } from "@/components/responsive-dialog";
+import { ResponsiveDialog } from '@/components/responsive-dialog';
+import { AgentForm } from '../ui/components/agent-form';
 
 interface NewAgentDialogProps {
   open: boolean;
@@ -14,7 +15,15 @@ export const NewAgentDialog = ({ open, onOpenChange }: NewAgentDialogProps) => {
       onOpenChange={onOpenChange}
     >
       <div className="py-4">
-        <p>New agent form or content goes here.</p>
+        <AgentForm
+          onSubmit={() => {
+            onOpenChange(false);
+          }}
+          onCancel={() => {
+            onOpenChange(false);
+          }}
+          initialValues={undefined}
+        />
       </div>
     </ResponsiveDialog>
   );
