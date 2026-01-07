@@ -17,8 +17,8 @@ export const AgentView = () => {
       console.log('🌐 CLIENT fetching agents in useQuery');
       return fetchAgents();
     },
-    staleTime: 0, // 🔥 Disable client-side caching
-    gcTime: 0, // 🔥 Disable garbage time cache
+    staleTime: 5 * 60 * 1000, // ✅ 5 minutes - data is fresh
+    gcTime: 10 * 60 * 1000, // ✅ 10 minutes - keep in memory
   });
 
   if (isLoading) {
