@@ -3,6 +3,9 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchAgents } from '@/app/api/agents/agents';
 import { LoadingState } from '@/components/loading-state';
 import { ErrorState } from '@/components/error-state';
+import { DataTable } from '../../components/data-table';
+import { columns } from '../../components/columns';
+import { EmptyState } from '@/components/empty-state';
 
 interface Agent {
   id: string;
@@ -40,13 +43,19 @@ export const AgentView = () => {
   }
   return (
     <div>
-      {Array.isArray(data) &&
-        data.map((agent: Agent) => (
-          <div key={agent.id}>
-            <h2>{agent.name}</h2>
-            <p>{agent.instructions}</p>
-          </div>
-        ))}
+      <DataTable
+        data={data || []}
+        columns={columns}
+        onRowClick={(row) => {
+          console.log(row);
+        }}
+      />
+      {data && data.length === 0 && (
+        <EmptyState
+          title="No agents found"
+          description="Please create an agent to get started"
+        />
+      )}
     </div>
   );
 };
