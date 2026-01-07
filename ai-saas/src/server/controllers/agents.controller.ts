@@ -20,7 +20,11 @@ export const getAgents = async (req: Request, res: Response) => {
     console.log(`❌ Cache MISS for agents:`, req.user.id);
     console.log('🗄️ Querying database...');
     const data = await db
-      .select()
+      .select({
+        id: agents.id,
+        name: agents.name,
+        instructions: agents.instructions,
+      })
       .from(agents)
       .where(eq(agents.userId, req.user.id));
     console.log(`📊 Found ${data.length} agents`);
