@@ -2,6 +2,7 @@
 
 import { GeneratedAvatar } from '@/components/generated-avatar';
 import { ColumnDef } from '@tanstack/react-table';
+import { CornerDownRightIcon } from 'lucide-react';
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -28,6 +29,13 @@ export const columns: ColumnDef<Agent>[] = [
           <GeneratedAvatar seed={row.original.name} variant="bottsNeutral" />
           <span className="font-semibold capitalize">{row.original.name}</span>
         </div>
+
+          <div className="flex items-center gap-x-1.5">
+            <CornerDownRightIcon className="size-3 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground max-w-[200px] truncate capitalize">
+              {row.original.instructions}
+            </span>
+          </div>
       </div>
     ),
   },
