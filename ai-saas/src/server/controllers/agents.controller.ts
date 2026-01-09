@@ -1,7 +1,7 @@
 import { db } from '@/db';
 import { agents } from '@/db/schema';
 
-import { eq } from 'drizzle-orm';
+import { eq, ilike } from 'drizzle-orm';
 
 import { Request, Response } from 'express';
 import { agentInsertSchema } from '@/modules/agents/schema';
@@ -26,7 +26,9 @@ export const getAgents = async (req: Request, res: Response) => {
         instructions: agents.instructions,
       })
       .from(agents)
-      .where(eq(agents.userId, req.user.id));
+      .where(eq(agents.userId, req.user.id),
+      search ? ilike(agents.name, `%${search}%`) : undefined,
+    );
 
     await redis.set(cacheKey, data, 300); //If not in the cache Set it in the cache
 
