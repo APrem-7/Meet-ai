@@ -25,14 +25,18 @@ export const columns: ColumnDef<Agent>[] = [
     header: 'AgentName',
     cell: ({ row }) => (
       <div className="flex flex-col gap-y-1">
-        <div className="flex items-center gap-x-2">
-          <GeneratedAvatar seed={row.original.name} variant="bottsNeutral" />
-          <span className="font-semibold capitalize">{row.original.name}</span>
+        <div className="flex items-center gap-x-2 group">
+          <div className="transition-transform duration-200 group-hover:scale-105">
+            <GeneratedAvatar seed={row.original.name} variant="bottsNeutral" />
+          </div>
+          <span className="font-semibold capitalize transition-colors duration-200 group-hover:text-foreground/80">
+            {row.original.name}
+          </span>
         </div>
 
-        <div className="flex items-center gap-x-1.5">
-          <CornerDownRightIcon className="size-3 text-muted-foreground" />
-          <span className="text-sm text-muted-foreground max-w-[200px] truncate capitalize">
+        <div className="flex items-center gap-x-1.5 opacity-70 group-hover:opacity-100 smooth-transition">
+          <CornerDownRightIcon className="size-3 text-muted-foreground transition-transform duration-200 group-hover:translate-x-0.5" />
+          <span className="text-sm text-muted-foreground max-w-[200px] truncate capitalize transition-colors duration-200 group-hover:text-muted-foreground/80">
             {row.original.instructions}
           </span>
         </div>
@@ -43,9 +47,14 @@ export const columns: ColumnDef<Agent>[] = [
     accessorKey: 'meetingcounts',
     header: 'Meetings',
     cell: ({ row }) => (
-      <Badge variant="outline" className="flex items-center gap-x-2 [&>svg]:size-4 ">
-        <VideoIcon className="text-blue-700" />
-        5
+      <Badge
+        variant="outline"
+        className="flex items-center gap-x-2 [&>svg]:size-4 smooth-transition hover:shadow-sm hover:bg-accent/50 group"
+      >
+        <VideoIcon className="text-blue-700 transition-transform duration-200 group-hover:scale-110" />
+        <span className="transition-colors duration-200 group-hover:text-foreground">
+          5
+        </span>
       </Badge>
     ),
   },

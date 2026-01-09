@@ -42,7 +42,7 @@ export const AgentView = () => {
     );
   }
   return (
-    <div>
+    <div className="animate-fade-smooth">
       <DataTable
         data={data || []}
         columns={columns}
@@ -51,10 +51,12 @@ export const AgentView = () => {
         }}
       />
       {data && data.length === 0 && (
-        <EmptyState
-          title="No agents found"
-          description="Please create an agent to get started"
-        />
+        <div className="animate-slide-up">
+          <EmptyState
+            title="No agents found"
+            description="Please create an agent to get started"
+          />
+        </div>
       )}
     </div>
   );

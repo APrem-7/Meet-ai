@@ -58,6 +58,8 @@ function PaginationLink({
           variant: isActive ? 'outline' : 'ghost',
           size,
         }),
+        'smooth-transition hover:shadow-sm hover:scale-105',
+        isActive && 'shadow-sm scale-105',
         className
       )}
       {...props}
@@ -107,10 +109,13 @@ function PaginationEllipsis({
     <span
       aria-hidden
       data-slot="pagination-ellipsis"
-      className={cn('flex size-9 items-center justify-center', className)}
+      className={cn(
+        'flex size-9 items-center justify-center smooth-transition',
+        className
+      )}
       {...props}
     >
-      <MoreHorizontalIcon className="size-4" />
+      <MoreHorizontalIcon className="size-4 animate-pulse" />
       <span className="sr-only">More pages</span>
     </span>
   );

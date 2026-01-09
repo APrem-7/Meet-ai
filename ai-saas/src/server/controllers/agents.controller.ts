@@ -13,12 +13,11 @@ export const getAgents = async (req: Request, res: Response) => {
     const cacheKey = `agents:${req.user.id}`;
     const cachedData = await redis.get(cacheKey);
     if (cachedData) {
-      console.log(`🎯 Cache HIT for agents:`, req.user.id);
       // Data is in cache, return it
       return res.json(cachedData);
     }
-    console.log(`❌ Cache MISS for agents:`, req.user.id);
-    console.log('🗄️ Querying database...');
+
+
     const data = await db
       .select({
         id: agents.id,
@@ -27,15 +26,17 @@ export const getAgents = async (req: Request, res: Response) => {
       })
       .from(agents)
       .where(eq(agents.userId, req.user.id));
-    console.log(`📊 Found ${data.length} agents`);
+
     await redis.set(cacheKey, data, 300); //If not in the cache Set it in the cache
-    console.log('💾 Cache SET for agents:', req.user.id);
+
     return res.json(data);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Failed to fetch agents' });
   }
 };
+
+
 
 export const createAgents = async (req: Request, res: Response) => {
   try {
@@ -50,7 +51,7 @@ export const createAgents = async (req: Request, res: Response) => {
       })
       .returning();
 
-    console.log(`🧹 Cache invalidated for agents:`, req.user.id);
+
     await redis.del(cacheKey);
 
     res.json(data);

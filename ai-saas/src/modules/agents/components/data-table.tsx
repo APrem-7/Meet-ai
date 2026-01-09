@@ -35,21 +35,26 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="overflow-hidden rounded-lg bg-background border">
+    <div className="overflow-hidden rounded-lg bg-background border shadow-sm animate-fade-in">
       <Table>
         <TableBody>
           {table.getRowModel().rows?.length
-            ? table.getRowModel().rows.map((row) => (
+            ? table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
-                  className="cursor-pointer"
+                  className="cursor-pointer smooth-transition hover:bg-muted/30 hover:shadow-sm border-b border-border/50"
+                  style={{
+                    animationDelay: `${index * 50}ms`,
+                    animation: 'slideUp 0.3s ease-out forwards',
+                    opacity: 0,
+                  }}
                   onClick={() => {
                     onRowClick?.(row.original);
                   }}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="py-3">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

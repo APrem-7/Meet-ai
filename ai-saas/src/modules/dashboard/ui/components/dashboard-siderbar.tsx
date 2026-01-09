@@ -11,8 +11,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SiderbarGroupContent,
-  SIdebarHeader,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -51,9 +49,20 @@ export const DashboardSidebar = () => {
   return (
     <Sidebar>
       <SidebarHeader className="text-sidebar-accent-foreground">
-        <Link href="/" className="flex items-center gap-2 px-2 pt-2">
-          <Image src="/logo.svg" height={36} width={36} alt="ZapAi" />
-          <p className="text-2xl font-semibold ">ZapAi</p>
+        <Link
+          href="/"
+          className="flex items-center gap-2 px-2 pt-2 group smooth-transition"
+        >
+          <Image
+            src="/logo.svg"
+            height={36}
+            width={36}
+            alt="ZapAi"
+            className="transition-transform duration-200 group-hover:scale-105"
+          />
+          <p className="text-2xl font-semibold transition-colors duration-200 group-hover:text-sidebar-accent-foreground/80">
+            ZapAi
+          </p>
         </Link>
       </SidebarHeader>
       <div className="px-4 py-2">
@@ -68,14 +77,14 @@ export const DashboardSidebar = () => {
                   <SidebarMenuButton
                     asChild
                     className={cn(
-                      'h-10 hover:bg-linear-to-r/oklch border border-transparent hover:border-[#5D6B68]/10 from-sidebar-accent from-5% via-30% via-sidebar/50 to-sidebar/50',
+                      'h-10 hover:bg-linear-to-r/oklch border border-transparent hover:border-[#5D6B68]/10 from-sidebar-accent from-5% via-30% via-sidebar/50 to-sidebar/50 smooth-transition',
                       pathname === item.href &&
-                        'bg-linear-to-r/oklch border-[#5D6B68]/10'
+                        'bg-linear-to-r/oklch border-[#5D6B68]/10 shadow-sm'
                     )}
                     isActive={pathname === item.href}
                   >
                     <Link href={item.href}>
-                      <item.icon className="size-5"></item.icon>
+                      <item.icon className="size-5 transition-transform duration-200 group-hover:scale-110"></item.icon>
                       <span className="text-sm font-medium tracking-tight">
                         {item.label}
                       </span>
@@ -99,14 +108,14 @@ export const DashboardSidebar = () => {
                   <SidebarMenuButton
                     asChild
                     className={cn(
-                      'h-10 hover:bg-linear-to-r/oklch border border-transparent hover:border-[#5D6B68]/10 from-sidebar-accent from-5% via-30% via-sidebar/50 to-sidebar/50',
+                      'h-10 hover:bg-linear-to-r/oklch border border-transparent hover:border-[#5D6B68]/10 from-sidebar-accent from-5% via-30% via-sidebar/50 to-sidebar/50 smooth-transition',
                       pathname === item.href &&
-                        'bg-linear-to-r/oklch border-[#5D6B68]/10'
+                        'bg-linear-to-r/oklch border-[#5D6B68]/10 shadow-sm'
                     )}
                     isActive={pathname === item.href}
                   >
                     <Link href={item.href}>
-                      <item.icon className="size-5"></item.icon>
+                      <item.icon className="size-5 transition-transform duration-200 group-hover:scale-110"></item.icon>
                       <span className="text-sm font-medium tracking-tight">
                         {item.label}
                       </span>
