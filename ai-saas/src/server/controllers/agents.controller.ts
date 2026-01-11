@@ -17,7 +17,7 @@ export const getAgents = async (req: Request, res: Response) => {
       return res.json(cachedData);
     }
 
-
+    cosnt {search}= req.query;
     const data = await db
       .select({
         id: agents.id,
