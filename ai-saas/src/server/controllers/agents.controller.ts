@@ -8,7 +8,7 @@ import { agentInsertSchema } from '@/modules/agents/schema';
 
 import { redis } from '@/lib/redis';
 
-import { DEFAULT_PAGE_SIZE } from '@/constant';
+import { DEFAULT_PAGE_SIZE, DEFAULT_PAGE } from '@/constant';
 
 export const getAgents = async (req: Request, res: Response) => {
   console.log('📋 GET /agents endpoint hit');
@@ -25,7 +25,19 @@ export const getAgents = async (req: Request, res: Response) => {
     }
 
     console.log('❌ Cache MISS - fetching from database');
-    const { search } = req.query;
+    const {
+      search,
+      page = DEFAULT_PAGE,
+      pageSize = DEFAULT_PAGE_SIZE,
+    } = req.query;
+
+    const pageNum = Number(page);
+    const pageSizeNum = Number(pageSize);
+    const offset = (pageNum - 1) * pageSizeNum;
+
+    console.log(
+      `📄 Page: ${pageNum}, PageSize: ${pageSizeNum}, Offset: ${offset}`
+    );
     console.log('🗄️ Querying database for agents...');
     const data = await db
       .select({
@@ -39,8 +51,14 @@ export const getAgents = async (req: Request, res: Response) => {
           eq(agents.userId, req.user.id),
           search ? ilike(agents.name, `%${search}%`) : undefined
         )
-      );
+      )
+      .limit(pageSizeNum)
+      .offset(offset);
     console.log(`📊 Found agents:`, data);
+    console.log(`📊 Data type: ${typeof data}`);
+    console.log(`📊 Is array? ${Array.isArray(data)}`);
+    console.log(`📊 Data length: ${data.length}`);
+    console.log(`📊 First item:`, data[0]);
 
     console.log('🔢 Counting total agents for pagination...');
     const [total] = await db
@@ -56,17 +74,27 @@ export const getAgents = async (req: Request, res: Response) => {
       );
     console.log(`📈 Total agents count: ${total.count}`);
 
-    const totalPage = Math.ceil(total.count / DEFAULT_PAGE_SIZE);
+    const totalPage = Math.ceil(total.count / pageSizeNum);
     console.log(`📄 Total pages: ${totalPage}`);
-    console.log(`💾 Setting cache with 300s TTL for key: ${cacheKey}`);
-    await redis.set(cacheKey, { data, totalPage, total }, 300); //If not in the cache Set it in the cache
-
-    console.log('✅ Successfully fetched and cached agents data');
-    return res.json({
-      agents: data,
+    console.log('💾 Setting cache with 300s TTL for key: ${cacheKey}');
+    const responseData = {
+      data: data,
       totalPages: totalPage,
       totalAgents: total.count,
-    }); 
+      currentPage: pageNum,
+      pageSize: pageSizeNum,
+    };
+    await redis.set(cacheKey, responseData, 300); //If not in the cache Set it in the cache
+
+    console.log('✅ Successfully fetched and cached agents data');
+    console.log('🔍 Response data structure:', {
+      data: data,
+      totalPages: totalPage,
+      totalAgents: total.count,
+      currentPage: pageNum,
+      pageSize: pageSizeNum,
+    });
+    return res.json(responseData);
   } catch (error) {
     console.error('❌ Error in getAgents:', error);
     return res.status(500).json({ message: 'Failed to fetch agents' });
