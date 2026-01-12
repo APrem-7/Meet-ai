@@ -2,7 +2,7 @@ import {z} from "zod"
 import {zodResolver} from "@hookform/resolvers/zod"
 import {useMutation, useQueryClient} from "@tanstack/react-query"
 import {createAgent} from "@/app/api/agents/agents"
-import {agentsInsertSchema} from "@/modules/agents/schemas"
+import {agentInsertSchema} from "@/modules/agents/schema"
 import { useForm } from "react-hook-form"
 
 interface AgentFormProps{
@@ -10,7 +10,7 @@ interface AgentFormProps{
   onCancel?: () => {},
   initialValues : {
     name : string,
-    instructions : string
+    instruction : string
   }
 }
 
@@ -21,11 +21,11 @@ export const AgentForm = ({
 }: AgentFormProps) => {
   const queryClient = useQueryClient();
 
-  const form = useForm<z.infer<typeof agentsInsertSchema>>({
-    resolver: zodResolver(agentsInsertSchema),
+  const form = useForm<z.infer<typeof agentInsertSchema>>({
+    resolver: zodResolver(agentInsertSchema),
     defaultValues: {
       name: initialValues?.name ?? "",
-      instructions: initialValues?.instructions ?? "",
+      instruction: initialValues?.instruction ?? "",
     },
   });
 
@@ -37,7 +37,9 @@ export const AgentForm = ({
     },
   });
 
-  const onSubmit = form.handleSubmit((values) => {
+  type AgentFormData = z.infer<typeof agentInsertSchema>;
+
+  const onSubmit = form.handleSubmit((values: AgentFormData) => {
     createAgentMutation.mutate(values);
   });
 
