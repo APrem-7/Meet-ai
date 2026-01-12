@@ -15,9 +15,15 @@ export const getAgents = async (req: Request, res: Response) => {
   console.log(`👤 User ID: ${req.user.id}`);
   console.log(`🔍 Search query: ${req.query.search || 'none'}`);
   try {
+
+
     const cacheKey = `agents:${req.user.id}`;
+
+    
     console.log(`💾 Checking cache for key: ${cacheKey}`);
     const cachedData = await redis.get(cacheKey);
+
+
     if (cachedData) {
       console.log('🎯 Cache HIT - returning cached agents data');
       // Data is in cache, return it
@@ -25,6 +31,8 @@ export const getAgents = async (req: Request, res: Response) => {
     }
 
     console.log('❌ Cache MISS - fetching from database');
+
+
     const {
       search,
       page = DEFAULT_PAGE,
@@ -39,6 +47,8 @@ export const getAgents = async (req: Request, res: Response) => {
       `📄 Page: ${pageNum}, PageSize: ${pageSizeNum}, Offset: ${offset}`
     );
     console.log('🗄️ Querying database for agents...');
+
+
     const data = await db
       .select({
         id: agents.id,
@@ -54,6 +64,8 @@ export const getAgents = async (req: Request, res: Response) => {
       )
       .limit(pageSizeNum)
       .offset(offset);
+
+
     console.log(`📊 Found agents:`, data);
     console.log(`📊 Data type: ${typeof data}`);
     console.log(`📊 Is array? ${Array.isArray(data)}`);
