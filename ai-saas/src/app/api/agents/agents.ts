@@ -2,17 +2,13 @@ import { agentInsertSchema } from '@/modules/agents/schema';
 import z from 'zod';
 
 export const fetchAgents = async (
-  search?: string,
   page?: number,
   pageSize?: number
 ) => {
   console.log('🌐 Fetching agents from backend API...');
-  console.log(`🔍 Search parameter: ${search || 'none'}`);
-  console.log(`📄 Page: ${page || 1}, PageSize: ${pageSize || 10}`);
+  console.log(` Page: ${page || 1}, PageSize: ${pageSize || 10}`);
   const url = new URL('http://localhost:8000/agents');
-  if (search) {
-    url.searchParams.set('search', search);
-  }
+  
   if (page) {
     url.searchParams.set('page', page.toString());
   }
@@ -36,6 +32,35 @@ export const fetchAgents = async (
   console.log('✅ Successfully fetched agents:', res_data);
   return res_data;
 };
+
+export const SearchAgents = async (
+  search?: string,
+
+) => {
+  console.log('🌐 Fetching agents from backend API...');
+  console.log(`🔍 Search parameter: ${search || 'none'}`);
+  const url = new URL('http://localhost:8000/agents');
+  if (search) {
+    url.searchParams.set('search', search);
+  }
+  console.log(`📡 Making GET request to: ${url.toString()}`);
+  const res = await fetch(url, {
+    method: 'GET',
+    credentials: 'include', // IMPORTANT: sends cookies for session
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!res.ok) {
+    console.error(`❌ Failed to fetch agents: ${res.status}`);
+    throw new Error(`Failed to fetch agents: ${res.status}`);
+  }
+  const res_data = await res.json();
+  console.log('✅ Successfully fetched agents:', res_data);
+  return res_data;
+};
+
 
 export const createAgent = async (input: z.infer<typeof agentInsertSchema>) => {
   console.log('🌐 Creating new agent via backend API...');
