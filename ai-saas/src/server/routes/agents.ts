@@ -1,12 +1,32 @@
 import express from 'express';
 
-import { requireAuth } from "@/server/middleware/auth-middleware";
-import { getAgents, createAgents } from "../controllers/agents.controller";
+import { requireAuth } from '@/server/middleware/auth-middleware';
+import { getAgents, createAgents } from '../controllers/agents.controller';
 
 const router = express.Router();
 
-router.get("/", requireAuth,getAgents);  // protected to show only the users agents not all agents
-router.post("/", requireAuth,createAgents);                  
+console.log('🛤️ Setting up agents routes...');
+
+router.get(
+  '/',
+  requireAuth,
+  (req, res, next) => {
+    console.log('📋 GET /agents route matched');
+    next();
+  },
+  getAgents
+); // protected to show only the users agents not all agents
+
+router.post(
+  '/',
+  requireAuth,
+  (req, res, next) => {
+    console.log('➕ POST /agents route matched');
+    next();
+  },
+  createAgents
+);
 //router.post("/", requireAuth, createAgent);    // protected
 
+console.log('✅ Agents routes configured');
 export default router;
