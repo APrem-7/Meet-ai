@@ -1,17 +1,17 @@
-import {z} from "zod"
-import {zodResolver} from "@hookform/resolvers/zod"
-import {useMutation, useQueryClient} from "@tanstack/react-query"
-import {createAgent} from "@/app/api/agents/agents"
-import {agentInsertSchema} from "@/modules/agents/schema"
-import { useForm } from "react-hook-form"
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createAgent } from '@/app/api/agents/agents';
+import { agentInsertSchema } from '@/modules/agents/schema';
+import { useForm } from 'react-hook-form';
 
-interface AgentFormProps{
-  onSuccess?: () => {},
-  onCancel?: () => {},
-  initialValues : {
-    name : string,
-    instruction : string
-  }
+interface AgentFormProps {
+  onSuccess?: () => void;
+  onCancel?: () => void;
+  initialValues: {
+    name: string;
+    instruction: string;
+  };
 }
 
 export const AgentForm = ({
@@ -24,15 +24,15 @@ export const AgentForm = ({
   const form = useForm<z.infer<typeof agentInsertSchema>>({
     resolver: zodResolver(agentInsertSchema),
     defaultValues: {
-      name: initialValues?.name ?? "",
-      instruction: initialValues?.instruction ?? "",
+      name: initialValues?.name ?? '',
+      instruction: initialValues?.instruction ?? '',
     },
   });
 
   const createAgentMutation = useMutation({
     mutationFn: createAgent,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["existingAgents"] });
+      queryClient.invalidateQueries({ queryKey: ['existingAgents'] });
       onSuccess?.();
     },
   });
@@ -46,9 +46,7 @@ export const AgentForm = ({
   return (
     <form onSubmit={onSubmit}>
       {/* inputs */}
-      <button type="submit">
-        Create
-      </button>
+      <button type="submit">Create</button>
       <button type="button" onClick={onCancel}>
         Cancel
       </button>
