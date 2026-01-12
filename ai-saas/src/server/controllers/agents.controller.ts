@@ -5,24 +5,23 @@ import { eq, ilike, count, and } from 'drizzle-orm';
 
 import { Request, Response } from 'express';
 import { agentInsertSchema } from '@/modules/agents/schema';
+import { paginationSchema } from '@/modules/agents/pagination-schema';
 
 import { redis } from '@/lib/redis';
-
-import { DEFAULT_PAGE_SIZE, DEFAULT_PAGE } from '@/constant';
 
 export const getAgents = async (req: Request, res: Response) => {
   console.log('📋 GET /agents endpoint hit');
   console.log(`👤 User ID: ${req.user.id}`);
   console.log(`🔍 Search query: ${req.query.search || 'none'}`);
   try {
-    const {
-      search,
-      page = DEFAULT_PAGE,
-      pageSize = DEFAULT_PAGE_SIZE,
-    } = req.query;
+    // Validate and parse query parameters using pagination schema
+    const validatedQuery = paginationSchema.parse({
+      page: req.query.page ? Number(req.query.page) : undefined,
+      pageSize: req.query.pageSize ? Number(req.query.pageSize) : undefined,
+      search: req.query.search,
+    });
 
-    const pageNum = Number(page);
-    const pageSizeNum = Number(pageSize);
+    const { page: pageNum, pageSize: pageSizeNum, search } = validatedQuery;
 
     const cacheKey = `agents:${req.user.id}:${
       search || 'all'

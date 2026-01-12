@@ -7,12 +7,11 @@ import {
 import { z } from 'zod';
 
 export const paginationSchema = z.object({
-  page: z.number().optional().default(DEFAULT_PAGE),
+  page: z.number().min(1).default(DEFAULT_PAGE),
   pageSize: z
     .number()
     .min(MIN_PAGE_SIZE)
     .max(MAX_PAGE_SIZE)
-    .default(DEFAULT_PAGE_SIZE)
-    .optional(),
+    .default(DEFAULT_PAGE_SIZE),
   search: z.string().optional(),
 });
