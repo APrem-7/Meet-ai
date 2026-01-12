@@ -7,6 +7,8 @@ import { DataTable } from '../../components/data-table';
 import { columns } from '../../components/columns';
 import { EmptyState } from '@/components/empty-state';
 
+import { useQueryState } from 'nuqs';
+
 interface Agent {
   id: string;
   name: string;
@@ -14,11 +16,23 @@ interface Agent {
 }
 
 export const AgentView = () => {
+
+  const [page, setPage] = useQueryState('page', {
+    defaultValue: 1,
+    parse: Number,
+  });
+  const [pageSize] = useQueryState('pageSize', {
+    defaultValue: 10,
+    parse: Number,
+  });
+
+  
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ['agents'],
+    queryKey: ['agents', page, pageSize],
     queryFn: () => {
       console.log('🌐 CLIENT fetching agents in useQuery');
-      return fetchAgents();
+      return fetchAgents(  page, pageSize);
     },
     staleTime: 5 * 60 * 1000, // ✅ 5 minutes - data is fresh
     gcTime: 10 * 60 * 1000, // ✅ 10 minutes - keep in memory
@@ -44,13 +58,13 @@ export const AgentView = () => {
   return (
     <div className="animate-fade-smooth">
       <DataTable
-        data={data || []}
+        data={data?.data || []}
         columns={columns}
         onRowClick={(row) => {
           console.log(row);
         }}
       />
-      {data && data.length === 0 && (
+      {data?.data && data.data.length === 0 && (
         <div className="animate-slide-up">
           <EmptyState
             title="No agents found"

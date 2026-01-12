@@ -53,7 +53,7 @@ export const columns: ColumnDef<Agent>[] = [
       >
         <VideoIcon className="text-blue-700 transition-transform duration-200 group-hover:scale-110" />
         <span className="transition-colors duration-200 group-hover:text-foreground">
-          5
+          5 Meetings
         </span>
       </Badge>
     ),

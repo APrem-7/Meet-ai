@@ -1,17 +1,17 @@
-import {z} from "zod"
-import {zodResolver} from "@hookform/resolvers/zod"
-import {useMutation, useQueryClient} from "@tanstack/react-query"
-import {createAgent} from "@/app/api/agents/agents"
-import {agentsInsertSchema} from "@/modules/agents/schemas"
-import { useForm } from "react-hook-form"
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createAgent } from '@/app/api/agents/agents';
+import { agentInsertSchema } from '@/modules/agents/schema';
+import { useForm } from 'react-hook-form';
 
-interface AgentFormProps{
-  onSuccess?: () => {},
-  onCancel?: () => {},
-  initialValues : {
-    name : string,
-    instructions : string
-  }
+interface AgentFormProps {
+  onSuccess?: () => void;
+  onCancel?: () => void;
+  initialValues: {
+    name: string;
+    instruction: string;
+  };
 }
 
 export const AgentForm = ({
@@ -21,32 +21,32 @@ export const AgentForm = ({
 }: AgentFormProps) => {
   const queryClient = useQueryClient();
 
-  const form = useForm<z.infer<typeof agentsInsertSchema>>({
-    resolver: zodResolver(agentsInsertSchema),
+  const form = useForm<z.infer<typeof agentInsertSchema>>({
+    resolver: zodResolver(agentInsertSchema),
     defaultValues: {
-      name: initialValues?.name ?? "",
-      instructions: initialValues?.instructions ?? "",
+      name: initialValues?.name ?? '',
+      instruction: initialValues?.instruction ?? '',
     },
   });
 
   const createAgentMutation = useMutation({
     mutationFn: createAgent,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["existingAgents"] });
+      queryClient.invalidateQueries({ queryKey: ['existingAgents'] });
       onSuccess?.();
     },
   });
 
-  const onSubmit = form.handleSubmit((values) => {
+  type AgentFormData = z.infer<typeof agentInsertSchema>;
+
+  const onSubmit = form.handleSubmit((values: AgentFormData) => {
     createAgentMutation.mutate(values);
   });
 
   return (
     <form onSubmit={onSubmit}>
       {/* inputs */}
-      <button type="submit">
-        Create
-      </button>
+      <button type="submit">Create</button>
       <button type="button" onClick={onCancel}>
         Cancel
       </button>

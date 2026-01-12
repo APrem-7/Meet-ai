@@ -4,6 +4,7 @@ import './globals.css';
 
 import Providers from './providers';
 import { Toaster } from 'sonner';
+import {NuqsAdapter} from 'nuqs/adapters/next/app';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -23,8 +24,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
         <Providers>
-          <Toaster />
-          {children}
+          <NuqsAdapter>
+            <Toaster />
+            {children}
+          </NuqsAdapter>
         </Providers>
       </body>
     </html>
