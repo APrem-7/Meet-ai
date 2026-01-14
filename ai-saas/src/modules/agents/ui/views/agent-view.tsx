@@ -6,6 +6,7 @@ import { ErrorState } from '@/components/error-state';
 import { DataTable } from '../../components/data-table';
 import { columns } from '../../components/columns';
 import { EmptyState } from '@/components/empty-state';
+import { useRouter } from 'next/navigation';
 
 import { useQueryState, parseAsInteger } from 'nuqs';
 
@@ -18,6 +19,7 @@ interface Agent {
 }
 
 export const AgentView = () => {
+  const router = useRouter();
   const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const [pageSize] = useQueryState('pageSize', parseAsInteger.withDefault(7));
 
@@ -54,7 +56,7 @@ export const AgentView = () => {
         data={data?.data || []}
         columns={columns}
         onRowClick={(row) => {
-          console.log(row);
+          router.push(`/agents/${row.id}`);
         }}
       />
       {data?.data && data.data.length === 0 && (
