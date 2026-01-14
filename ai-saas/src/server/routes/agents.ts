@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { requireAuth } from '@/server/middleware/auth-middleware';
-import { getAgents, createAgents } from '../controllers/agents.controller';
+import { getAgents, getOneAgent, createAgents } from '../controllers/agents.controller';
 
 const router = express.Router();
 
@@ -16,6 +16,16 @@ router.get(
   },
   getAgents
 ); // protected to show only the users agents not all agents
+
+router.get(
+  '/:agentId',
+  requireAuth,
+  (req, res, next) => {
+    console.log('📋 GET /agent route matched');
+    next();
+  },
+  getOneAgent
+); // protected to show only the users selected agent not all agents
 
 router.post(
   '/',
