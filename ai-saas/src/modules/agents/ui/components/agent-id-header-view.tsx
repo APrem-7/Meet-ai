@@ -70,7 +70,7 @@ export const AgentIdHeaderView = ({
       </Breadcrumb>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" aria-label="More actions">
             <MoreVertical />
           </Button>
         </DropdownMenuTrigger>
@@ -81,7 +81,10 @@ export const AgentIdHeaderView = ({
             Edit
           </DropdownMenuItem>
 
-          <DropdownMenuItem onClick={onCancel} className="gap-2 text-red-600 focus:text-red-600">
+          <DropdownMenuItem
+            onClick={onCancel}
+            className="gap-2 text-red-600 focus:text-red-600"
+          >
             <Trash2 className="h-4 w-4" />
             Delete
           </DropdownMenuItem>
