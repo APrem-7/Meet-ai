@@ -98,3 +98,23 @@ export const getOneAgent = async (agentId: string) => {
   console.log('✅ Successfully fetched agent:', result);
   return result;
 };
+
+export const deleteAgent=async(agentId:string)=>{
+const res = await fetch(`http://localhost:8000/agents/${agentId}`, {
+  method: 'DELETE',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  credentials: 'include', // IMPORTANT for cookies/session
+});
+
+if (!res.ok) {
+    console.error(`❌ Failed to delete ${agentId} agent: ${res.status}`);
+    throw new Error(`Failed to delete ${agentId} agent: ${res.status}`);
+  }
+
+  const result = await res.json();
+  console.log('✅ Successfully deleted agent:', result);
+  return result;
+
+}
