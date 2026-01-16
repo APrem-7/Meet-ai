@@ -5,6 +5,7 @@ import {
   getAgents,
   getOneAgent,
   createAgents,
+  deleteAgent,
 } from '../controllers/agents.controller';
 
 const router = express.Router();
@@ -41,6 +42,16 @@ router.post(
   createAgents
 );
 //router.post("/", requireAuth, createAgent);    // protected
+
+router.delete(
+  '/:agentId',
+  requireAuth,
+  (req, res, next) => {
+    console.log('➕ POST /agents route matched');
+    next();
+  },
+  deleteAgent
+);
 
 console.log('✅ Agents routes configured');
 export default router;
