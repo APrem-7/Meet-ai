@@ -27,7 +27,7 @@ export const AgentIdView = ({ agentId }: Props) => {
   });
   const [RemoveConfirmation, confirmRemove] = useConfirm(
     'Delete Agent',
-    'Are you sure you want to delete this agent?'
+`Are you sure you want to delete agent ${data?.name}`
   );
   if (isLoading) {
     return (
