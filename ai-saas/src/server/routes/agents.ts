@@ -1,7 +1,13 @@
 import express from 'express';
 
 import { requireAuth } from '@/server/middleware/auth-middleware';
-import { getAgents, getOneAgent, createAgents } from '../controllers/agents.controller';
+import {
+  getAgents,
+  getOneAgent,
+  createAgents,
+  deleteAgent,
+  updateAgent,
+} from '../controllers/agents.controller';
 
 const router = express.Router();
 
@@ -37,6 +43,26 @@ router.post(
   createAgents
 );
 //router.post("/", requireAuth, createAgent);    // protected
+
+router.delete(
+  '/:agentId',
+  requireAuth,
+  (req, res, next) => {
+    console.log('➕ DELETE /agents route matched');
+    next();
+  },
+  deleteAgent
+);
+
+router.put(
+  '/:agentId',
+  requireAuth,
+  (req, res, next) => {
+    console.log('➕ PUT/UPDATE /agents route matched');
+    next();
+  },
+ updateAgent
+);
 
 console.log('✅ Agents routes configured');
 export default router;

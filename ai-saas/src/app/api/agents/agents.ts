@@ -98,3 +98,50 @@ export const getOneAgent = async (agentId: string) => {
   console.log('✅ Successfully fetched agent:', result);
   return result;
 };
+
+export const deleteAgent = async (agentId: string) => {
+  const res = await fetch(`http://localhost:8000/agents/${agentId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include', // IMPORTANT for cookies/session
+  });
+
+  if (!res.ok) {
+    console.error(`❌ Failed to delete ${agentId} agent: ${res.status}`);
+    throw new Error(`Failed to delete ${agentId} agent: ${res.status}`);
+  }
+
+  const result = await res.json();
+  console.log('✅ Successfully deleted agent:', result);
+  return result;
+};
+
+export const updateAgent = async (
+  agentId: string,
+  input: z.infer<typeof agentInsertSchema>
+) => {
+  console.log('🌐 Creating new agent via backend API...');
+  console.log('📝 Input data:', input);
+  const input_data = agentInsertSchema.parse(input); // 👈 REAL SECURITY
+  console.log('✅ Input validation passed');
+  console.log('📡 Making POST request to: http://localhost:8000/agents');
+  const res = await fetch(`http://localhost:8000/agents/${agentId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include', // IMPORTANT for cookies/session
+    body: JSON.stringify(input_data),
+  });
+
+  if (!res.ok) {
+    console.error(`❌ Failed to update agent: ${res.status}`);
+    throw new Error(`Failed to update agent: ${res.status}`);
+  }
+
+  const result = await res.json();
+  console.log('✅ Successfully updated agent:', result);
+  return result;
+};
