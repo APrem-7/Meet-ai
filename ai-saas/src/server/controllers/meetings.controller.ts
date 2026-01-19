@@ -135,7 +135,10 @@ export const createMeetings = async (req: Request, res: Response) => {
     await redis.invalidate(pattern);
 
     console.log('✅ Meeting creation complete');
-    return res.json(data) || { message: 'Failed to create meeting' };
+    if (!data) {
+      return res.status(500).json({ message: 'Failed to create meeting' });
+    }
+    return res.json(data);
   } catch (error) {
     console.error('❌ Error in createmeetings:', error);
     return res.status(500).json({
@@ -165,8 +168,10 @@ export const getOneMeeting = async (req: Request, res: Response) => {
     }
 
     console.log('✅ Successfully fetched meeting');
-
-    return res.json(data) || { message: 'Failed to fetch meeting' };
+    if (!data) {
+      return res.status(500).json({ message: 'Failed to fetch meeting' });
+    }
+    return res.json(data);
   } catch (error) {
     console.error('❌ Error in getOneMeeting:', error);
     return res.status(500).json({
@@ -197,7 +202,10 @@ export const deleteMeeting = async (req: Request, res: Response) => {
     await redis.invalidate(pattern);
 
     console.log(`🗑️ Successfully deleted meeting with ID: ${meetingId}`);
-    return res.json(removedMeeting) || { message: 'Failed to delete meeting' };
+    if (!removedMeeting) {
+      return res.status(500).json({ message: 'Failed to delete meeting' });
+    }
+    return res.json(removedMeeting);
   } catch (error) {
     console.error('❌ Error in deleteMeeting:', error);
     return res.status(500).json({
@@ -237,7 +245,10 @@ export const updateMeeting = async (req: Request, res: Response) => {
     await redis.invalidate(pattern);
 
     console.log(`🗑️ Successfully updated meeting with ID: ${meetingId}`);
-    return res.json(data) || { message: 'Failed to update meeting' };
+    if (!data) {
+      return res.status(500).json({ message: 'Failed to update meeting' });
+    }
+    return res.json(data);
   } catch (error) {
     console.error('❌ Error in updateMeeting:', error);
     return res.status(500).json({
