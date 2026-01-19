@@ -110,3 +110,37 @@ export const getMeetings = async (req: Request, res: Response) => {
   }
 };
 
+export const createmeetings = async (req: Request, res: Response) => {
+  console.log('➕ POST /meetings endpoint hit');
+  console.log(`👤 User ID: ${req.user.id}`);
+  console.log('📝 Request body:', req.body);
+  try {
+    console.log('🔍 Validating input with schema...');
+    const input = meetingInsertSchema.parse(req.body); // 🔥 REAL SECURITY
+    console.log('✅ Input validation passed');
+    console.log('💾 Inserting new agent into database...');
+    const [data] = await db
+      .insert(meetings)
+      .values({
+        name: input.name,
+        userId: req.user.id,
+        agentId: input.agentId,
+      })
+      .returning();
+    console.log(`✅ Successfully created agent with ID: ${data.id}`);
+    console.log(
+      `🗑️ Invalidating all agent search caches for user ${req.user.id}`
+    );
+    const pattern = `meetings:${req.user.id}:*`;
+    await redis.invalidate(pattern);
+
+    console.log('✅ Agent creation complete');
+    return res.json(data) || { message: 'Failed to create agent' };
+  } catch (error) {
+    console.error('❌ Error in createmeetings:', error);
+    return res.status(500).json({
+      message: 'Failed to create agent',
+    });
+  }
+};
+
