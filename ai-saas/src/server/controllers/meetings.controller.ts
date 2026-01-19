@@ -175,3 +175,34 @@ export const getOneMeeting = async (req: Request, res: Response) => {
   }
 };
 
+export const deleteMeeting = async (req: Request, res: Response) => {
+  const { meetingId } = req.params;
+
+  try {
+    const [removedAgent] = await db
+      .delete(meetings)
+      .where(and(eq(meetings.userId, req.user.id), eq(meetings.id, meetingId)))
+      .returning();
+
+    if (!removedAgent) {
+      return res.status(404).json({
+        message: 'Meeting not found',
+      });
+    }
+
+    console.log(
+      `🗑️ Invalidating all agent search caches for user ${req.user.id}`
+    );
+    const pattern = `meetings:${req.user.id}:*`;
+    await redis.invalidate(pattern);
+
+    console.log(`🗑️ Successfully deleted meeting with ID: ${meetingId}`);
+    return res.json(removedAgent) || { message: 'Failed to delete meeting' };
+  } catch (error) {
+    console.error('❌ Error in deleteMeeting:', error);
+    return res.status(500).json({
+      message: 'Failed to delete meeting',
+    });
+  }
+};
+
