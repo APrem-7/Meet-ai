@@ -5,20 +5,33 @@ import { LoadingState } from '@/components/loading-state';
 import { ErrorState } from '@/components/error-state';
 import { getQueryClient } from '@/utils/query-client';
 import { AgentIdHeaderView } from '@/modules/agents/ui/components/agent-id-header-view';
+import { UpdateAgentDialog } from '@/modules/agents/components/update-agent-dialog';
 import { GeneratedAvatar } from '@/components/generated-avatar';
 import { Badge } from '@/components/ui/badge';
 import { VideoIcon } from 'lucide-react';
+import { deleteAgent } from '@/app/api/agents/agents';
+
+import { useRouter } from 'next/navigation';
+import { useConfirm } from '@/hooks/use-confirm';
+import { useState } from 'react';
+
 interface Props {
   agentId: string;
 }
 
 export const AgentIdView = ({ agentId }: Props) => {
   console.log(agentId);
+  const router = useRouter();
   const queryClient = getQueryClient();
   const { data, isLoading, error } = useQuery({
     queryKey: ['agents', agentId],
     queryFn: () => getOneAgent(agentId),
   });
+  const [RemoveConfirmation, confirmRemove] = useConfirm(
+    'Delete Agent',
+`Are you sure you want to delete agent ${data?.name}`
+  );
+  const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
   if (isLoading) {
     return (
       <LoadingState
@@ -37,36 +50,80 @@ export const AgentIdView = ({ agentId }: Props) => {
     );
   }
 
+  const onDelete = async () => {
+    try {
+      // Cancel the ongoing query first
+      queryClient.cancelQueries({
+        queryKey: ['agents', agentId],
+      });
+
+      await deleteAgent(agentId);
+
+      // Remove the query from cache
+      queryClient.removeQueries({
+        queryKey: ['agents', agentId],
+      });
+
+      // Invalidate and redirect to agents list
+      queryClient.invalidateQueries({
+        queryKey: ['agents'],
+      });
+      router.push('/agents');
+    } catch (error) {
+      console.error('Failed to delete agent:', error);
+      // Show error toast/message to user
+    }
+  };
+
+  const handelRemoveAgent = async () => {
+    const ok = await confirmRemove();
+    if (!ok) {
+      return;
+    }
+    onDelete();
+  };
+
   return (
-    <div className="flex-1 py-4 px-4 md:px-8 flex flex-col gap-y-4">
-      <AgentIdHeaderView
+    <>
+      <RemoveConfirmation />
+      <UpdateAgentDialog
+        open={isUpdateDialogOpen}
+        onOpenChange={setIsUpdateDialogOpen}
         agentId={agentId}
-        agentName={data.name}
-        onEdit={() => {}}
-        onCancel={() => {}}
       />
-      <div className="bg-white rounded-lg border">
-        <div className="px-4 py-5 gap-y-5 flex flex-col col-span-5">
-          <div className="flex items-center gap-x-3">
-            <GeneratedAvatar
-              seed={data.name}
-              variant="bottsNeutral"
-              className="size-16"
-            />
-            <h2 className="text-2xl font-medium">{data.name}</h2>
+      <div className="flex-1 py-4 px-4 md:px-8 flex flex-col gap-y-4">
+        <AgentIdHeaderView
+          agentId={agentId}
+          agentName={data.name}
+          onEdit={() => setIsUpdateDialogOpen(true)}
+          onCancel={() => {}}
+          onDelete={handelRemoveAgent}
+        />
+        <div className="bg-white rounded-lg border">
+          <div className="px-4 py-5 gap-y-5 flex flex-col col-span-5">
+            <div className="flex items-center gap-x-3">
+              <GeneratedAvatar
+                seed={data.name}
+                variant="bottsNeutral"
+                className="size-16"
+              />
+              <h2 className="text-2xl font-medium">{data.name}</h2>
+            </div>
+            <Badge
+              variant="outline"
+              className="flex items-center gap-x-2 [&>svg]:size-4"
+            >
+              <VideoIcon />
+              {data.meetingCount}{' '}
+              {data.meetingCount === 1 ? 'Meeting' : 'Meetings'}
+            </Badge>
+            <div className="flex flex-col gap-y-4">
+              <p className="text-lg font-medium">Instructions</p>
+              <p className="text-neutral-800">{data.instructions}</p>
+            </div>
           </div>
-          <Badge variant="outline" className="flex items-center gap-x-2 [&>svg]:size-4">
-            <VideoIcon />
-            {data.meetingCount} {data.meetingCount === 1 ? 'Meeting' : 'Meetings'}
-          </Badge>
-          <div className="flex flex-col gap-y-4">
-            <p className="text-lg font-medium">Instructions</p>
-            <p className="text-neutral-800">{data.instructions}</p>
-          </div>
-
-
         </div>
       </div>
-    </div>
+    </>
   );
 };

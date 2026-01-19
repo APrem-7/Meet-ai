@@ -156,7 +156,7 @@ export const getOneAgent = async (req: Request, res: Response) => {
       .from(agents)
       .where(and(eq(agents.userId, req.user.id), eq(agents.id, agentId)))
       .limit(1);
-      
+
     if (!data) {
       return res.status(404).json({
         message: 'Agent not found',
@@ -170,6 +170,73 @@ export const getOneAgent = async (req: Request, res: Response) => {
     console.error('❌ Error in getOneAgent:', error);
     return res.status(500).json({
       message: 'Failed to get agent',
+    });
+  }
+};
+
+export const deleteAgent = async (req: Request, res: Response) => {
+  const { agentId } = req.params;
+
+  try {
+    const [removedAgent] = await db
+      .delete(agents)
+      .where(and(eq(agents.userId, req.user.id), eq(agents.id, agentId)))
+      .returning();
+
+    if (!removedAgent) {
+      return res.status(404).json({
+        message: 'Agent not found',
+      });
+    }
+
+    console.log(
+      `🗑️ Invalidating all agent search caches for user ${req.user.id}`
+    );
+    const pattern = `agents:${req.user.id}:*`;
+    await redis.invalidate(pattern);
+
+    console.log(`🗑️ Successfully deleted agent with ID: ${agentId}`);
+    return res.json(removedAgent) || { message: 'Failed to delete agent' };
+  } catch (error) {
+    console.error('❌ Error in deleteAgent:', error);
+    return res.status(500).json({
+      message: 'Failed to delete agent',
+    });
+  }
+};
+
+export const updateAgent = async (req: Request, res: Response) => {
+  const { agentId } = req.params;
+  try {
+
+    const parsed = agentInsertSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({
+        message: 'Invalid input',
+      });
+    }
+
+    const {name,instruction} = parsed.data;
+
+    const [data] = await db
+      .update(agents)
+      .set({ name: name, instructions: instruction })
+      .where(and(eq(agents.userId, req.user.id), eq(agents.id, agentId)))
+      .returning();
+
+    console.log(
+      `🗑️ Invalidating all agent search caches for user ${req.user.id}`
+    );
+    const pattern = `agents:${req.user.id}:*`;
+    await redis.invalidate(pattern);
+
+    console.log(`🗑️ Successfully updated agent with ID: ${agentId}`);
+    return res.json(data) || { message: 'Failed to update agent' };
+
+  } catch (error) {
+    console.error('❌ Error in updateAgent:', error);
+    return res.status(500).json({
+      message: 'Failed to update agent',
     });
   }
 };
