@@ -144,3 +144,34 @@ export const createmeetings = async (req: Request, res: Response) => {
   }
 };
 
+export const getOneMeeting = async (req: Request, res: Response) => {
+  try {
+    const { meetingId } = req.params;
+
+    const [data] = await db
+      .select({
+        id: meetings.id,
+        name: meetings.name,
+        agentId: meetings.agentId,
+      })
+      .from(meetings)
+      .where(and(eq(meetings.userId, req.user.id), eq(meetings.id, meetingId)))
+      .limit(1);
+
+    if (!data) {
+      return res.status(404).json({
+        message: 'Meeting not found',
+      });
+    }
+
+    console.log('✅ Successfully fetched meeting');
+
+    return res.json(data) || { message: 'Failed to fetch meeting' };
+  } catch (error) {
+    console.error('❌ Error in getOneMeeting:', error);
+    return res.status(500).json({
+      message: 'Failed to get meeting',
+    });
+  }
+};
+
