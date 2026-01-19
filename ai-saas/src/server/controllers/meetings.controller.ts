@@ -224,6 +224,12 @@ export const updateMeeting = async (req: Request, res: Response) => {
       .where(and(eq(meetings.userId, req.user.id), eq(meetings.id, meetingId)))
       .returning();
 
+    if (!data) {
+      return res.status(404).json({
+        message: 'Meeting not found',
+      });
+    }
+    
     console.log(
       `🗑️ Invalidating all meeting search caches for user ${req.user.id}`
     );
