@@ -110,7 +110,7 @@ export const getMeetings = async (req: Request, res: Response) => {
   }
 };
 
-export const createmeetings = async (req: Request, res: Response) => {
+export const createMeetings = async (req: Request, res: Response) => {
   console.log('➕ POST /meetings endpoint hit');
   console.log(`👤 User ID: ${req.user.id}`);
   console.log('📝 Request body:', req.body);
