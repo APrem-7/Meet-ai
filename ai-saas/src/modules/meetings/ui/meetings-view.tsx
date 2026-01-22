@@ -7,6 +7,9 @@ import { meetingInsertSchema } from '@/modules/meetings/schema';
 
 import { z } from 'zod';
 
+import { LoadingState } from '@/components/loading-state';
+import { ErrorState } from '@/components/error-state';
+
 export type MeetingInsert = z.infer<typeof meetingInsertSchema>;
 
 export const MeetingView = () => {
@@ -16,6 +19,13 @@ export const MeetingView = () => {
   });
   return (
     <div>
+      {isLoading && (
+        <LoadingState
+          title="Loading..."
+          description="Please wait while we load the data"
+        />
+      )}
+      {error && <ErrorState title="Error" description="Something went wrong" />}
       {data?.data?.map((meeting: MeetingInsert) => (
         <div key={meeting.agentId}>{meeting.name}</div>
       ))}
