@@ -49,7 +49,7 @@ app.get('/test-cache', async (req, res) => {
       random: Math.random(),
     };
 
-    await redis.set(cacheKey, testData, 60);
+    await redis.set(cacheKey, testData, 300);
     console.log('💾 Test Cache SET');
 
     res.json({ message: 'Cache MISS', data: testData });
@@ -64,6 +64,13 @@ import agentsRouter from './routes/agents';
 
 console.log('🛤️ Registering agents routes...');
 app.use('/agents', agentsRouter);
+
+// Meetings Route
+console.log('🔗 Loading meetings routes...');
+import meetingsRouter from './routes/meetings';
+
+console.log('🛤️ Registering meetings routes...');
+app.use('/meetings', meetingsRouter);
 
 // Start Server
 app.listen(PORT, () => {
