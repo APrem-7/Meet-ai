@@ -27,7 +27,7 @@ export const MeetingView = () => {
       )}
       {error && <ErrorState title="Error" description="Something went wrong" />}
       {data?.data?.map((meeting: MeetingInsert) => (
-        <div key={meeting.agentId}>{meeting.name}</div>
+        <div key={meeting.id}>{meeting.name}</div>
       ))}
     </div>
   );
