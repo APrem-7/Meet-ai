@@ -19,6 +19,7 @@ import { GeneratedAvatar } from '@/components/generated-avatar';
 import { AgentSearchButton } from './agent-search';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { NewAgentDialog } from '@/modules/agents/components/new-agent-dialog';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -49,6 +50,7 @@ export const MeetingForm = ({
 }: MeetingFormProps) => {
   const [avatarSeed, setAvatarSeed] = useState(initialValues?.name || 'agent'); //TODO:might need to change
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+  const [isNewAgentDialogOpen, setIsNewAgentDialogOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const createMeetingMutation = useMutation({
@@ -135,60 +137,83 @@ export const MeetingForm = ({
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          name="name"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder="Enter agent name"
-                  onBlur={(e) => {
-                    field.onBlur();
-                    setAvatarSeed(e.target.value.trim() || 'agent');
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            name="name"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Enter agent name"
+                    onBlur={(e) => {
+                      field.onBlur();
+                      setAvatarSeed(e.target.value.trim() || 'agent');
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          name="agentId"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Agent</FormLabel>
-              <FormControl>
-                <AgentSearchButton
-                  selectedAgent={selectedAgent}
-                  onSelect={(agent) => {
-                    setSelectedAgent(agent);
-                    field.onChange(agent.id);
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            name="agentId"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Agent</FormLabel>
+                <FormControl>
+                  <AgentSearchButton
+                    selectedAgent={selectedAgent}
+                    onSelect={(agent) => {
+                      setSelectedAgent(agent);
+                      field.onChange(agent.id);
+                    }}
+                  />
+                </FormControl>
+                <div className="flex justify-start mt-1">
+                  <span className="text-sm text-muted-foreground">
+                    Didn't find what you're looking for?{' '}
+                    <button
+                      type="button"
+                      onClick={() => setIsNewAgentDialogOpen(true)}
+                      className="text-blue-500 hover:text-blue-600 text-sm"
+                    >
+                      Create a new Agent
+                    </button>
+                  </span>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <div className="flex justify-between gap-x-2">
-          {onCancel && (
-            <Button variant="ghost" onClick={() => onCancel()}>
-              Cancel
+          <div className="flex justify-between items-center mt-4">
+            {onCancel && (
+              <Button variant="ghost" onClick={() => onCancel()}>
+                Cancel
+              </Button>
+            )}
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="bg-blue-500 hover:bg-blue-600"
+            >
+              {isEdit ? 'Update Meeting' : 'Create Meeting'}
             </Button>
-          )}
-          <Button type="submit" disabled={isPending}>
-            {isEdit ? 'Update Meeting' : 'Create Meeting'}
-          </Button>
-        </div>
-      </form>
-    </Form>
+          </div>
+        </form>
+      </Form>
+
+      <NewAgentDialog
+        open={isNewAgentDialogOpen}
+        onOpenChange={setIsNewAgentDialogOpen}
+      />
+    </>
   );
 };
