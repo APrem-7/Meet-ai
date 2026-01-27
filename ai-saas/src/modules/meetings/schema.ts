@@ -10,6 +10,7 @@ export const meetingResponseSchema = z.object({
   name: z.string(),
   userId: z.string(),
   agentId: z.string(),
+  agentName: z.string(),
   status: z.enum([
     'upcoming',
     'active',

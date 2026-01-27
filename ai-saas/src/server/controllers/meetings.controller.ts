@@ -52,6 +52,7 @@ export const getMeetings = async (req: Request, res: Response) => {
       .select({
         // All meeting columns
         ...getTableColumns(meetings),
+        agentName: agents.name,
         // Duration calculation
         duration:
           sql<number>`EXTRACT(EPOCH FROM (${meetings.endedAt} - ${meetings.startedAt}))`.as(
