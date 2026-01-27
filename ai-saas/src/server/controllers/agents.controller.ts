@@ -208,7 +208,6 @@ export const deleteAgent = async (req: Request, res: Response) => {
 export const updateAgent = async (req: Request, res: Response) => {
   const { agentId } = req.params;
   try {
-
     const parsed = agentInsertSchema.safeParse(req.body);
     if (!parsed.success) {
       return res.status(400).json({
@@ -216,7 +215,7 @@ export const updateAgent = async (req: Request, res: Response) => {
       });
     }
 
-    const {name,instruction} = parsed.data;
+    const { name, instruction } = parsed.data;
 
     const [data] = await db
       .update(agents)
@@ -232,7 +231,6 @@ export const updateAgent = async (req: Request, res: Response) => {
 
     console.log(`🗑️ Successfully updated agent with ID: ${agentId}`);
     return res.json(data) || { message: 'Failed to update agent' };
-
   } catch (error) {
     console.error('❌ Error in updateAgent:', error);
     return res.status(500).json({
