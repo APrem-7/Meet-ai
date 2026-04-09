@@ -73,7 +73,28 @@ console.log('🛤️ Registering meetings routes...');
 app.use('/meetings', meetingsRouter);
 
 // Start Server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`🚀 Express server running on http://localhost:${PORT}`);
   console.log('✅ Server initialization complete');
 });
+
+// Graceful shutdown: disconnect all active AI agent sessions
+import { disconnectAllSessions } from './controllers/agent-realtime.controller';
+
+const gracefulShutdown = (signal: string) => {
+  console.log(`\n🛑 Received ${signal}. Shutting down gracefully...`);
+  disconnectAllSessions();
+  server.close(() => {
+    console.log('✅ Server closed');
+    process.exit(0);
+  });
+
+  // Force exit after 10 seconds if graceful shutdown hangs
+  setTimeout(() => {
+    console.error('⚠️ Forced shutdown after timeout');
+    process.exit(1);
+  }, 10000);
+};
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));

@@ -61,7 +61,7 @@ router.put(
     console.log('➕ PUT/UPDATE /agents route matched');
     next();
   },
- updateAgent
+  updateAgent
 );
 
 console.log('✅ Agents routes configured');

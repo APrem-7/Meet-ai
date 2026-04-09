@@ -11,22 +11,93 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useCallContext } from '../providers/call-provider';
 import { LoadingState } from '@/components/loading-state';
 import { MeetingLayout } from './MeetingLayout';
+import {
+  connectAgent,
+  disconnectAgent,
+} from '@/app/api/agents/meetings';
 
 export const MeetingRoom = () => {
   const router = useRouter();
   const { meetingId } = useParams<{ meetingId: string }>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [agentConnected, setAgentConnected] = useState(false);
   const { leaveCall } = useCallContext();
 
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
 
+  // Guards to prevent StrictMode double-connect
+  const hasAttemptedConnect = useRef(false);
+  // Tracks whether the agent is currently connected (set by both auto-connect and manual toggle)
+  const agentConnectedRef = useRef(false);
+
+  // Disconnect agent helper — fire-and-forget, safe to call multiple times
+  const disconnectAgentSafe = useCallback(
+    async (id: string) => {
+      if (!agentConnectedRef.current) return;
+      try {
+        await disconnectAgent(id);
+      } catch (error) {
+        console.error('Failed to disconnect AI agent:', error);
+      } finally {
+        setAgentConnected(false);
+        agentConnectedRef.current = false;
+        hasAttemptedConnect.current = false;
+      }
+    },
+    []
+  );
+
+  // Auto-connect AI agent + cleanup on unmount (single effect to avoid StrictMode issues)
+  useEffect(() => {
+    if (hasAttemptedConnect.current) return;
+    if (callingState !== CallingState.JOINED || !meetingId) return;
+
+    // Set guard BEFORE the async call to prevent StrictMode double-fire
+    hasAttemptedConnect.current = true;
+
+    let cancelled = false;
+
+    const doConnect = async () => {
+      try {
+        await connectAgent(meetingId);
+        if (!cancelled) {
+          setAgentConnected(true);
+          agentConnectedRef.current = true;
+        }
+      } catch (error) {
+        console.error('Failed to auto-connect AI agent:', error);
+        if (!cancelled) {
+          hasAttemptedConnect.current = false;
+        }
+      }
+    };
+
+    doConnect();
+
+    // Cleanup: only disconnect if the agent is actually connected.
+    // In StrictMode, the first render's cleanup fires before connectAgent
+    // resolves, so agentConnectedRef.current will still be false — no disconnect.
+    return () => {
+      cancelled = true;
+      if (agentConnectedRef.current && meetingId) {
+        disconnectAgent(meetingId).catch(() => {});
+        agentConnectedRef.current = false;
+        hasAttemptedConnect.current = false;
+      }
+    };
+  }, [callingState, meetingId]);
+
   const handleLeave = () => setIsDialogOpen(true);
-  const handleConfirmLeave = () => {
+  const handleConfirmLeave = async () => {
+    // Disconnect the AI agent before leaving
+    if (meetingId && agentConnected) {
+      await disconnectAgentSafe(meetingId);
+    }
     leaveCall();
     router.push(`/meetings/${meetingId}`);
   };
@@ -51,7 +122,25 @@ export const MeetingRoom = () => {
 
   return (
     <>
-      <MeetingLayout meetingId={meetingId} onLeave={handleLeave} />
+      <MeetingLayout
+        meetingId={meetingId}
+        onLeave={handleLeave}
+        agentConnected={agentConnected}
+        onAgentToggle={async () => {
+          if (agentConnected) {
+            await disconnectAgentSafe(meetingId);
+          } else {
+            try {
+              await connectAgent(meetingId);
+              setAgentConnected(true);
+              agentConnectedRef.current = true;
+              hasAttemptedConnect.current = true;
+            } catch (error) {
+              console.error('Failed to connect AI agent:', error);
+            }
+          }
+        }}
+      />
 
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <AlertDialogContent className="max-w-sm bg-[#2d2e31] border-[#3c4043] text-white">

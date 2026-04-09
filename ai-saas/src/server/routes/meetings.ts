@@ -11,62 +11,38 @@ import {
   generateMeetingToken,
 } from '../controllers/meetings.controller';
 
+import {
+  autoConnectAgent,
+  disconnectAIAgent,
+  getAgentStatus,
+} from '../controllers/agent-realtime.controller';
+
 const router = express.Router();
 
-console.log('🛤️ Setting up meetings routes...');
+// --- Meeting CRUD routes ---
 
-router.get(
-  '/',
-  requireAuth,
-  (req, res, next) => {
-    console.log('📋 GET /meetings route matched');
-    next();
-  },
-  getMeetings
-); // protected to show only the users agents not all agents
-
-router.get(
-  '/:meetingId',
-  requireAuth,
-  (req, res, next) => {
-    console.log('📋 GET /meeting route matched');
-    next();
-  },
-  getOneMeeting
-); // protected to show only the users selected agent not all agents
-
-router.post(
-  '/',
-  requireAuth,
-  (req, res, next) => {
-    console.log('➕ POST /meetings route matched');
-    next();
-  },
-  createMeetings
-);
-//router.post("/", requireAuth, createAgent);    // protected
-
-router.delete(
-  '/:meetingId',
-  requireAuth,
-  (req, res, next) => {
-    console.log('➕ DELETE /meeting route matched');
-    next();
-  },
-  deleteMeeting
-);
-
-router.put(
-  '/:meetingId',
-  requireAuth,
-  (req, res, next) => {
-    console.log('➕ PUT/UPDATE /meeting route matched');
-    next();
-  },
-  updateMeeting
-);
-
+router.get('/', requireAuth, getMeetings);
+router.get('/:meetingId', requireAuth, getOneMeeting);
+router.post('/', requireAuth, createMeetings);
+router.delete('/:meetingId', requireAuth, deleteMeeting);
+router.put('/:meetingId', requireAuth, updateMeeting);
 router.post('/token', requireAuth, generateMeetingToken);
 
-console.log('✅ Meetings routes configured');
+// --- AI Agent routes ---
+
+router.post('/:meetingId/agent/auto-connect', requireAuth, async (req, res) => {
+  const { meetingId } = req.params;
+  await autoConnectAgent(meetingId, req, res);
+});
+
+router.post('/:meetingId/agent/disconnect', requireAuth, async (req, res) => {
+  const { meetingId } = req.params;
+  await disconnectAIAgent(meetingId, req, res);
+});
+
+router.get('/:meetingId/agent/status', requireAuth, async (req, res) => {
+  const { meetingId } = req.params;
+  await getAgentStatus(meetingId, req, res);
+});
+
 export default router;

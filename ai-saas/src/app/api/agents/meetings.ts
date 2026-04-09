@@ -109,3 +109,64 @@ export const getOneMeeting = async (meetingId: string) => {
   const res_data = await res.json();
   return res_data;
 };
+
+export const connectAgent = async (meetingId: string) => {
+  const url = new URL(
+    `http://localhost:8000/meetings/${meetingId}/agent/auto-connect`
+  );
+
+  const res = await fetch(url, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to connect agent to meeting: ${res.status}`);
+  }
+
+  const res_data = await res.json();
+  return res_data;
+};
+
+
+export const disconnectAgent = async (meetingId: string) => {
+  const url = new URL(
+    `http://localhost:8000/meetings/${meetingId}/agent/disconnect`
+  );
+
+  const res = await fetch(url, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to disconnect agent from meeting: ${res.status}`);
+  }
+
+  const res_data = await res.json();
+  return res_data;
+};
+
+export const getAgentStatus = async (meetingId: string) => {
+  const url = new URL(
+    `http://localhost:8000/meetings/${meetingId}/agent/status`
+  );
+
+  const res = await fetch(url, {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to get agent status: ${res.status}`);
+  }
+
+  const res_data = await res.json();
+  return res_data;
+};
