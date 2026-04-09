@@ -94,7 +94,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
                         value={agent.name}
                       >
                         <GeneratedAvatar
-                          seed={agent.name}
+                          seed={agent.id}
                           variant="bottsNeutral"
                           className="mr-3 h-7 w-7 flex-shrink-0"
                         />

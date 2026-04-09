@@ -97,7 +97,7 @@ export const AgentSearch = ({
                         value={agent.name}
                       >
                         <GeneratedAvatar
-                          seed={agent.name}
+                          seed={agent.id}
                           variant="bottsNeutral"
                           className="mr-3 h-7 w-7 flex-shrink-0"
                         />
@@ -160,7 +160,7 @@ export const AgentSearchButton = ({
         {selectedAgent ? (
           <div className="flex items-center gap-x-2 flex-1">
             <GeneratedAvatar
-              seed={selectedAgent.name}
+              seed={selectedAgent.id}
               variant="bottsNeutral"
               className="border size-5"
             />
